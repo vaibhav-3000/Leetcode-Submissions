@@ -1,39 +1,49 @@
 class Solution {
 public:
-    string minWindow(string s, string t) {
-        int n=s.size();
+    string minWindow(string s, string t) 
+    {
+        map<char,int>t_map;
+        for(auto x:t)
+            t_map[x]++;
+        int start=0;
+        int end=0;
+        int n=s.length();
+        int res=INT_MAX;
         map<char,int>mp;
-        map<char,int>temp;
-        for(auto e:t)mp[e]++;
-        int i=0;
-        int ans=INT_MAX;
-        int st,en;
-        for(int j=0;j<n;){
-            temp[s[j]]++;
-            int f=1;
-            for(auto e:mp){
-                if(temp[e.first]<e.second){
-                    f=0;break;
+        int fstart,fend;
+        while(end<n)
+        {
+            char curr=s[end];
+            mp[curr]++;
+            bool flag=true;     
+            for(auto x:t_map)
+            {
+                char ch=x.first;
+                if(mp[ch]<t_map[ch])
+                {
+                    flag=false;
+                    break;
                 }
             }
-            if(f){
-               // cout<<i<<" "<<j<<endl;
-                //for(auto e:temp)cout<<e.first<<" "<<e.second<<"::";cout<<endl;
-                if(j-i+1<ans){
-                    ans=j-i+1;
-                    st=i;
-                    en=j;
+            if(flag)
+            {
+                int clen=end-start+1;
+                if(clen<res)
+                { 
+                    res=clen;
+                    fstart=start;
+                    fend=end;
                 }
-                temp[s[i]]--;
-                temp[s[j]]--;
-                i++;
+                    mp[s[start]]--;
+                    start++;
+                    mp[s[end]]--;
             }
-            else{
-                j++;
+            else
+            {
+                end++;
             }
         }
-     //   cout<<ans<<endl;
-        if(ans==INT_MAX)return "";
-        return s.substr(st,en-st+1);
+        if(res==INT_MAX)return "";
+        return s.substr(fstart,fend-fstart+1);
     }
 };
