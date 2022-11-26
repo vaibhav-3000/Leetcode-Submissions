@@ -2,8 +2,8 @@ class Solution {
 public:
     string minWindow(string s, string t) {
         int n=s.size();
-        unordered_map<char,int>mp;
-        unordered_map<char,int>temp;
+        map<char,int>mp;
+        map<char,int>temp;
         for(auto e:t)mp[e]++;
         int i=0;
         int ans=INT_MAX;
