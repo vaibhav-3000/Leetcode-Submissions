@@ -1,56 +1,32 @@
 class Solution {
 public:
-    map<string,list<string>> graph;
-    bool cmp(string &s,string &t)
-    {
-        int n=s.length();
-        int cnt=0;
-        for(int i=0;i<n;i++)
-        {
-            if(s[i]!=t[i])
-                cnt++;
-        }
-        return cnt==1 ? true : false;
-    }
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) 
-    {   wordList.push_back(beginWord);
-        int n=wordList.size();
-        for(int i=0;i<n;i++)
-        {
-            string par=wordList[i];
-            for(int j=i+1;j<n;j++)
-            {
-                string child=wordList[j];
-                bool ok=cmp(par,child);
-                if(ok)
-                {
-                    graph[par].push_back(child);
-                    graph[child].push_back(par);
-                }
-            }
-        }
-        // for(auto e:graph){
-        //     cout<<e.first<<"::";
-        //     for(auto it:e.second)cout<<it<<" ";cout<<endl;
-        // }
-        map<string,int>dis;
-        dis[beginWord]=1;
-        queue<string>q;
-        q.push(beginWord);
-        while(!q.empty())
-        {
+    int ladderLength(string strt, string en, vector<string>& wordList) {
+        unordered_set<string>st;
+        for(auto e:wordList)st.insert(e);
+        queue<pair<string,int>>q;//word level;
+        q.push({strt,1});
+        unordered_map<string,int>mp;
+        mp[strt]=1;
+        while(!q.empty()){
             auto f=q.front();
             q.pop();
-            //cout<<f<<" "<<dis[f]<<endl;
-            for(auto nbrs:graph[f])
-            {  
-                if(!dis.count(nbrs))
-                { 
-                    dis[nbrs]=1+dis[f];
-                    q.push(nbrs);
+            string s=f.first;
+            int level=f.second;
+            if(s==en)return level;
+            for(int i=0;i<s.size();i++){
+                string cpy=s;
+                for(char c='a';c<='z';c++){
+                    cpy[i]=c;
+                    if(st.find(cpy)!=st.end()){
+                        if(!mp[cpy]){
+                            q.push({cpy,level+1});
+                            mp[cpy]=1;
+                        }
+                    }
                 }
+                
             }
         }
-        return dis[endWord];
+        return 0;
     }
 };
