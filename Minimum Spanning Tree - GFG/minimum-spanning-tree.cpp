@@ -5,12 +5,13 @@ using namespace std;
 // } Driver Code Ends
 
 int parent[1001];
-
+int sizez[1001];
 class Solution
 {
 	public:
 	void make(int i){
 	    parent[i]=i;
+	    sizez[i]=1;
 	}
 	int find(int v){
 	    if(v==parent[v])return v;
@@ -20,8 +21,9 @@ class Solution
 	    a=find(a);
 	    b=find(b);
 	    if(a!=b){
-	        //cout<<b<<" "<<a<<endl;
+	        if(sizez[a]<sizez[b])swap(a,b);
 	        parent[b]=a;
+	        sizez[a]+=sizez[b];
 	    }
 	}
 	
